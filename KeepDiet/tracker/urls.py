@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index')
+    path('day/<int:pk>/', views.DayDetailView.as_view(), name='day-detail')
 ]
