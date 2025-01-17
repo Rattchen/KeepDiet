@@ -20,3 +20,16 @@ class Meal(models.Model):
     quantity = models.FloatField()
     unit = models.CharField(max_length=25)
     calories = models.IntegerField()
+
+
+class DaySummary(models.Model):
+    """ Holds additional info about the whole day, like activity or weight"""
+    #TODO: Weight should update user's profile if provided
+    #TODO: kcal summary
+
+    weight = models.FloatField()
+    was_active = models.BooleanField()
+    activity_name = models.CharField(max_length=250)
+    activity_quantity = models.FloatField()
+    activity_unit = models.CharField(max_length=25)
+
