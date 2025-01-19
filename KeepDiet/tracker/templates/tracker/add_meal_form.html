@@ -1,0 +1,5 @@
+<form method="POST" action="{% url 'add_meal' %}">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit">Dodaj!</button>
+</form>

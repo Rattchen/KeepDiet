@@ -1,12 +1,20 @@
 {% for product in results %}
-  {% if product.brand_name %}
-    <b>{{product.brand_name}} </b>
-  {% endif %}
+{% if product.brand_name %}
+<b>{{product.brand_name}} </b>
+{% endif %}
 
-  {{product.food_name}}
-  ID: 
-  <a href="product/{{product.food_id}}">See info about the product</a>
-  <br/>
-  {% empty %}
-  <h1> Nothing found! </h1>
+{{product.food_name}}
+<a href="product/{{product.food_id}}">See info about the product</a>
+
+<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{product.food_id}}"
+  aria-expanded="false" aria-controls="collapse{{product.food_id}}" 
+  hx-get="{% url 'add_meal_id' product.food_id %}" hx-target="#collapse{{product.food_id}}" hx-swap="innerHTML">
+  +
+</button>
+</p>
+<div class="collapse" id="collapse{{product.food_id}}">
+</div>
+<br />
+{% empty %}
+<h1> Nothing found! </h1>
 {% endfor %}

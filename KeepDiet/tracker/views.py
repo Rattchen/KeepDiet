@@ -2,9 +2,10 @@ import os
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, JsonResponse, Http404
-from django.views.generic import DetailView, TemplateView, View
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, TemplateView, View, CreateView
 from fatsecret import Fatsecret
-from .models import DaySummary
+from .models import DaySummary, Meal
 from .dto import ProductDTO
 
 FS_CONSUMER = str(os.getenv('FS_CONSUMER'))
@@ -21,6 +22,16 @@ class DayDetailView(DetailView):
         context["meals"] = self.object.meals.all()
         return context
 
+class MealCreateView(CreateView):
+    #TODO: add get&post methods
+    model = Meal
+    template_name = "tracker/add_meal_form.html"
+    context_object_name = 'meal'
+    success_url = reverse_lazy('day_detail', kwargs={'pk':1}) #TODO: Dynamic pk
+
+
+    fields = ['date', 'time', 'category', 'name', 'quantity', 'unit', 'calories', 'comment', 'day']
+
 class SearchPageView(TemplateView):
     template_name = "tracker/search.html"
 
@@ -30,7 +41,6 @@ class SearchView(View):
         fs = Fatsecret(FS_CONSUMER, FS_SECRET)
         result = fs.foods_search(query)
         result_html = render_to_string('tracker/partials/search_results.html', {'results':result})
-        print(result)
         return HttpResponse(result_html)
 
 class ProductDetailView(DetailView):
