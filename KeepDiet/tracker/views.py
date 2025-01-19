@@ -1,7 +1,13 @@
+import os
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import DetailView
+from fatsecret import Fatsecret
 from .models import DaySummary
+
+FS_CONSUMER = str(os.getenv('FS_CONSUMER'))
+FS_SECRET = str(os.getenv('FS_SECRET'))
+
 
 class DayDetailView(DetailView):
     model = DaySummary
@@ -12,3 +18,12 @@ class DayDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context["meals"] = self.object.meals.all()
         return context
+
+def apicalltest(request):
+    fs = Fatsecret(FS_CONSUMER, FS_SECRET)
+    try:
+        banana = fs.foods_search("nalesniki")
+        print(banana)
+    except:
+        print("Nothing found!")
+    return HttpResponse('Test')
