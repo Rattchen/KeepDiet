@@ -1,7 +1,7 @@
 import os
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.generic import DetailView
+from django.http import HttpResponse, JsonResponse
+from django.views.generic import DetailView, TemplateView, View
 from fatsecret import Fatsecret
 from .models import DaySummary
 
@@ -19,13 +19,12 @@ class DayDetailView(DetailView):
         context["meals"] = self.object.meals.all()
         return context
 
-def apicalltest(request):
-    fs = Fatsecret(FS_CONSUMER, FS_SECRET)
-    try:
-        banana = fs.foods_search("banana")
-        bananaid = banana[0]['food_id']
-        info = fs.food_get_v2(bananaid)
-        print(info)
-    except:
-        print("Nothing found!")
-    return HttpResponse('Test')
+class SearchPageView(TemplateView):
+    template_name = "tracker/search_results.html"
+
+class SearchView(View):
+    def get(self, request):
+        query = request.GET.get('search', '')
+        fs = Fatsecret(FS_CONSUMER, FS_SECRET)
+        res = fs.foods_search(query)
+        return JsonResponse({"results":res})

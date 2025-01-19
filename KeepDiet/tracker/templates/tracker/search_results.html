@@ -1,0 +1,15 @@
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+
+<input type="search" name="search" id="search" placeholder="Search..." 
+    hx-get="/search/"
+    hx-trigger="keyup changed delay: 1s"
+    hx-target="#search-results"
+    hx-swap="innerHTML">
+
+<div id="search-results">
+    {% for product in food %}
+    <h1> I exist! </h1>
+    {% empty %}
+    <h1> Nothing found! </h1>
+    {% endfor %}
+</div>
