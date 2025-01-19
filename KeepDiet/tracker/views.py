@@ -22,8 +22,10 @@ class DayDetailView(DetailView):
 def apicalltest(request):
     fs = Fatsecret(FS_CONSUMER, FS_SECRET)
     try:
-        banana = fs.foods_search("nalesniki")
-        print(banana)
+        banana = fs.foods_search("banana")
+        bananaid = banana[0]['food_id']
+        info = fs.food_get_v2(bananaid)
+        print(info)
     except:
         print("Nothing found!")
     return HttpResponse('Test')
