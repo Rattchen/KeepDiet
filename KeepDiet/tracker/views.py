@@ -1,5 +1,6 @@
 import os
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import DetailView, TemplateView, View
 from fatsecret import Fatsecret
@@ -20,11 +21,13 @@ class DayDetailView(DetailView):
         return context
 
 class SearchPageView(TemplateView):
-    template_name = "tracker/search_results.html"
+    template_name = "tracker/search.html"
 
 class SearchView(View):
     def get(self, request):
         query = request.GET.get('search', '')
         fs = Fatsecret(FS_CONSUMER, FS_SECRET)
-        res = fs.foods_search(query)
-        return JsonResponse({"results":res})
+        result = fs.foods_search(query)
+        result_html = render_to_string('tracker/partials/search_results.html', {'results':result})
+        print(result)
+        return HttpResponse(result_html)

@@ -1,0 +1,12 @@
+{% for product in results %}
+  {% if product.brand_name %}
+    <b>{{product.brand_name}} </b>
+  {% endif %}
+
+  {{product.food_name}}
+  ID: 
+  <a href="product/{{product.food_id}}">See info about the product</a>
+  <br/>
+  {% empty %}
+  <h1> Nothing found! </h1>
+{% endfor %}
