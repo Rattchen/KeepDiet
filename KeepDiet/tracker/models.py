@@ -40,11 +40,10 @@ class WeightRecord(models.Model):
     user = models.ForeignKey(TrackerProfile, on_delete=models.CASCADE)
     weight = models.FloatField()
     timestamp = models.DateTimeField()
-    day = models.OneToOneField(DaySummary, on_delete=models.CASCADE)
+    day = models.OneToOneField(DaySummary, on_delete=models.CASCADE, related_name="weight")
 
     def __str__(self):
-        return f"Weight of {self.user.user.username} on {self.day}"
-    
+        return f"Weight of {self.user.user.username} on {self.day}"  
 
 class Activity(models.Model):
     """ Record of user's physical activity """
@@ -52,7 +51,7 @@ class Activity(models.Model):
     name = models.CharField(max_length=250, null=True, blank=True)
     quantity = models.FloatField(null=True, blank=True)
     unit = models.CharField(max_length=25, null=True, blank=True)
-    day = models.ForeignKey(DaySummary, on_delete=models.CASCADE)
+    day = models.ForeignKey(DaySummary, on_delete=models.CASCADE, related_name="activities")
 
     def __str__(self):
         return f"Activity on {self.day}"

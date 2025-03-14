@@ -104,8 +104,8 @@
   <main>
 
     <center>
-      <h1>Day: Date, hour - date, hour.</h1>
-      <!-- First meal date&hour - last meal date&hour -->
+      <h1>{{meals.first.date}}, {{meals.first.time}} - {{meals.last.date}}, {{meals.last.time}}</h1>
+      
       <!-- TODO: sort meals by date -->
     </center>
 
@@ -122,8 +122,14 @@
       <div class="divTableBody">
         <div class="divTableRow">
           <div class="divTableCell">{{day.total_calories}}</div>
-          <div class="divTableCell">{{day.weight}}</div>
-          <div class="divTableCell">{{day.activity_quantity}} {{day.activity_unit}}</div>
+          <div class="divTableCell">{{day.weight.weight}}</div>
+          <div class="divTableCell">
+            
+            {% for activity in day.activities.all %} 
+              {{activity.name}} - {{activity.quantity}} {{activity.unit}} ||
+            {%endfor%}
+          
+          </div>
         </div>
       </div>
     </div>

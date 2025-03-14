@@ -17,6 +17,9 @@ class DayDetailView(DetailView):
     template_name = 'tracker/index.html'
     context_object_name = 'day'
 
+    def get_queryset(self):
+        return DaySummary.objects.prefetch_related("activities")
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["meals"] = self.object.meals.all()
