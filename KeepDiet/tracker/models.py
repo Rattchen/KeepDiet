@@ -3,6 +3,7 @@ from django.conf import settings
 
 class TrackerProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    weight = models.FloatField(null=True, blank=True) # TODO: make it the last WeightRecord
 
     def __str__(self):
         return f"{self.user.username}'s profile"
@@ -26,7 +27,6 @@ class DaySummary(models.Model):
     #TODO: Weight should update user's profile if provided
 
     user = models.ForeignKey(TrackerProfile, on_delete=models.CASCADE)
-    weight = models.FloatField(null=True, blank=True)
     measurements = models.ForeignKey(Measurements, on_delete=models.CASCADE, related_name="day", null=True, blank=True)
 
     @property
@@ -35,6 +35,16 @@ class DaySummary(models.Model):
 
     def __str__(self):
         return f"Day summary for {self.user.user.username}"
+
+class WeightRecord(models.Model):
+    user = models.ForeignKey(TrackerProfile, on_delete=models.CASCADE)
+    weight = models.FloatField()
+    timestamp = models.DateTimeField()
+    day = models.OneToOneField(DaySummary, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Weight of {self.user.user.username} on {self.day}"
+    
 
 class Activity(models.Model):
     """ Record of user's physical activity """
