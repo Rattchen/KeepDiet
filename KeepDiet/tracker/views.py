@@ -11,6 +11,8 @@ from .dto import ProductDTO
 FS_CONSUMER = str(os.getenv('FS_CONSUMER'))
 FS_SECRET = str(os.getenv('FS_SECRET'))
 
+class HomeView(TemplateView):
+    template_name = 'tracker/home.html'
 
 class DayDetailView(DetailView):
     model = DaySummary
