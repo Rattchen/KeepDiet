@@ -1,11 +1,11 @@
 import os
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
-from django.http import HttpResponse, JsonResponse, Http404
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, TemplateView, View, CreateView
 from fatsecret import Fatsecret
-from .models import DaySummary, Meal
+from .models import DaySummary, Meal, TrackerProfile
 from .dto import ProductDTO
 
 FS_CONSUMER = str(os.getenv('FS_CONSUMER'))
@@ -13,6 +13,12 @@ FS_SECRET = str(os.getenv('FS_SECRET'))
 
 class HomeView(TemplateView):
     template_name = 'tracker/home.html'
+
+class DayCreateView(View):
+    def get(self, request):
+        day = DaySummary.objects.create(user=get_object_or_404(TrackerProfile, id=1))
+        return redirect('day_detail', pk=day.pk)
+    
 
 class DayDetailView(DetailView):
     model = DaySummary
