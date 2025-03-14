@@ -9,7 +9,7 @@ class TrackerProfile(models.Model):
 
 class Measurements(models.Model):
     """ Holds body measurements to keep track of the progress"""
-    
+
     unit = models.CharField(max_length=25, null=True, blank=True)
     arm = models.FloatField(null=True, blank=True)
     chest = models.FloatField(null=True, blank=True)
@@ -22,16 +22,12 @@ class Measurements(models.Model):
         return f"Measurements for {self.day}"
 
 class DaySummary(models.Model):
-    """ Holds additional info about the whole day, like activity or weight"""
+    """ A summary of the day; meals, activities, etc. """
     #TODO: Weight should update user's profile if provided
 
     user = models.ForeignKey(TrackerProfile, on_delete=models.CASCADE)
     weight = models.FloatField(null=True, blank=True)
     measurements = models.ForeignKey(Measurements, on_delete=models.CASCADE, related_name="day", null=True, blank=True)
-    was_active = models.BooleanField()
-    activity_name = models.CharField(max_length=250, null=True, blank=True)
-    activity_quantity = models.FloatField(null=True, blank=True)
-    activity_unit = models.CharField(max_length=25, null=True, blank=True)
 
     @property
     def total_calories(self):
@@ -39,6 +35,17 @@ class DaySummary(models.Model):
 
     def __str__(self):
         return f"Day summary for {self.user.user.username}"
+
+class Activity(models.Model):
+    """ Record of user's physical activity """
+
+    name = models.CharField(max_length=250, null=True, blank=True)
+    quantity = models.FloatField(null=True, blank=True)
+    unit = models.CharField(max_length=25, null=True, blank=True)
+    day = models.ForeignKey(DaySummary, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Activity on {self.day}"
 
 class Meal(models.Model):
     """ Holds info pertaining to a single meal"""
