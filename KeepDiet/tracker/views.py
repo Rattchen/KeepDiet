@@ -18,7 +18,6 @@ class DayCreateView(View):
     def get(self, request):
         day = DaySummary.objects.create(user=get_object_or_404(TrackerProfile, id=1))
         return redirect('day_detail', pk=day.pk)
-    
 
 class DayDetailView(DetailView):
     model = DaySummary
@@ -63,3 +62,8 @@ class ProductDetailView(DetailView):
         fs = Fatsecret(FS_CONSUMER, FS_SECRET)
         result = fs.food_get_v2(product_id)
         return ProductDTO.from_json(result)
+
+class ProfileDetailView(DetailView):
+    model = TrackerProfile
+    template_name = 'tracker/profile.html'
+    context_object_name = "profile"
